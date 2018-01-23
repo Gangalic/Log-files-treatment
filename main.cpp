@@ -57,6 +57,14 @@ void traitementGeneral(string f, Option option);
 int main(int argc, char* argv[])
 {
     Read(argc, argv);
+	//for testing
+	for (auto elem : trajets){
+	    cout<<elem.first.first<<" "<<elem.first.second<<" "<<elem.second<<endl;
+	}
+	cout<<endl;
+	for (auto elem : hits){
+	    cout<<elem.first<<" "<<elem.second<<endl;
+	}
 
 }
 
@@ -196,11 +204,26 @@ void traitementGeneral(string f, Option option){
 		Requete lineR = Requete(line);
 		if (lineR.ObtenirStatut()==200){
 			if (option.typeOption[1]){
-				//cout<<lineR.ObtenirExtension();
+				//only text pages
 				if (lineR.ObtenirExtension()=="html"){
-				    cout<<"URL depart: "<<lineR.ObtenirURLdepart()<<endl;
-				    cout<<"URL arrivee: "<<lineR.ObtenirURLarrivee()<<endl;
-				    cout<<endl;
+				    string URLd=lineR.ObtenirURLdepart();
+				    string URLa=lineR.ObtenirURLarrivee();
+				    /*cout<<"URL depart: "<<URLd<<endl;
+				    cout<<"URL arrivee: "<<URLa<<endl;
+				    cout<<endl;*/
+				    //adding to 2 keys matrix
+				    auto posT = trajets.find(make_pair(URLd,URLa));
+				    if (posT==trajets.end()){
+				        trajets.insert(make_pair(make_pair(URLd,URLa),1));
+				    }else{
+				        posT->second++;
+				    }
+				    auto posH = hits.find(URLa);
+				    if (posH==hits.end()){
+				        hits.insert(make_pair(URLa,1));
+				    }else{
+				        posH->second++;
+				    }
 				}
 			}
 			if (option.typeOption[2]){
