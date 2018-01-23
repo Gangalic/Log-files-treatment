@@ -17,6 +17,8 @@ using namespace std;
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <vector>
+#include <algorithm>
 
 //------------------------------------------------------ Include personnel
 #include "Requete.h"
@@ -34,6 +36,7 @@ struct Option {
 //---------------------------------------------------- Variables statiques
 map <pair<string,string>,int> trajets;
 map <string,int> hits;
+vector <pair<string, int>> top (10);
 Option option;
 bool erreur =false;
 
@@ -59,12 +62,15 @@ int main(int argc, char* argv[])
 {
     
     Read(argc, argv);
-    for (auto elem : trajets){
+    /*for (auto elem : trajets){
 	    cout<<elem.first.first<<" "<<elem.first.second<<" "<<elem.second<<endl;
 	}
 	cout<<endl;
 	for (auto elem : hits){
 	    cout<<elem.first<<" "<<elem.second<<endl;
+	}*/
+	for (pair<string,int> t : top){
+	    cout<<t.first<<" "<<t.second<<endl;
 	}
 
 }
@@ -248,6 +254,10 @@ void traitementGeneral(string f){
 		    }
 		}
 	}
+	partial_sort_copy(hits.begin(),hits.end(),top.begin(),top.end(),
+	                [](const pair<string, int> &a, const pair<string,int> &b){
+	                    return a.second>b.second;
+	                });
 	fi.close();
 }
 
