@@ -34,6 +34,7 @@ struct Option {
 //---------------------------------------------------- Variables statiques
 map <pair<string,string>,int> trajets;
 map <string,int> hits;
+Option option;
 bool erreur =false;
 
 //------------------------------------------------------ Fonctions privées
@@ -51,14 +52,14 @@ bool erreur =false;
 //class declaration
 void Read (int argc, char* argv[]);
 
-void traitementGeneral(string f, Option option);
+void traitementGeneral(string f);
 
 //main
 int main(int argc, char* argv[])
 {
+    
     Read(argc, argv);
-	//for testing
-	for (auto elem : trajets){
+    for (auto elem : trajets){
 	    cout<<elem.first.first<<" "<<elem.first.second<<" "<<elem.second<<endl;
 	}
 	cout<<endl;
@@ -70,7 +71,6 @@ int main(int argc, char* argv[])
 
 //class definition
 void Read (int argc, char* argv[]){
-    Option option;
     string nomFichierLog;
 
     if(argc == 1)
@@ -190,48 +190,62 @@ void Read (int argc, char* argv[]){
     {
         //traitement des fichiers
         string file=string(argv[argc-1]);
-        traitementGeneral(file,option);
+        traitementGeneral(file);
     }
 }
 
 //traitement
-void traitementGeneral(string f, Option option){
+void traitementGeneral(string f){
 	string line;
 	ifstream fi;
 	fi.open(f);
+	bool selection;
+	bool grafiqueMovements=false;
+	// if we have a graph of movements
+	if (option.typeOption[0]){
+	   grafiqueMovements=true;
+	}
 	while (fi.good()){
 		getline(fi, line);
+		selection=true;
 		Requete lineR = Requete(line);
+		
 		if (lineR.ObtenirStatut()==200){
+			//only text documents
 			if (option.typeOption[1]){
-				//only text pages
-				if (lineR.ObtenirExtension()=="html"){
-				    string URLd=lineR.ObtenirURLdepart();
-				    string URLa=lineR.ObtenirURLarrivee();
-				    /*cout<<"URL depart: "<<URLd<<endl;
-				    cout<<"URL arrivee: "<<URLa<<endl;
-				    cout<<endl;*/
-				    //adding to 2 keys matrix
-				    auto posT = trajets.find(make_pair(URLd,URLa));
-				    if (posT==trajets.end()){
-				        trajets.insert(make_pair(make_pair(URLd,URLa),1));
-				    }else{
-				        posT->second++;
-				    }
-				    auto posH = hits.find(URLa);
-				    if (posH==hits.end()){
-				        hits.insert(make_pair(URLa,1));
-				    }else{
-				        posH->second++;
-				    }
+				if (lineR.ObtenirExtension()!="html"){
+				    selection=false;
 				}
 			}
-			if (option.typeOption[2]){
-				// for certain time
+			// for certain time
+			if (option.typeOption[2] && selection){
+				if (lineR.ObtenirHeure()!=option.heure){
+				    selection=false;
+				}
 			}
-			if (option.typeOption[0]){
-				// decide where to put the 2 keys matrix such that it takes less of memory
-			}
+		}else{
+		    selection=false;
+		}
+		
+		if (selection){
+		    string URLd=lineR.ObtenirURLdepart();
+		    string URLa=lineR.ObtenirURLarrivee();
+		    // adding elems to map
+		    auto posH = hits.find(URLa);
+		    if (posH==hits.end()){
+		        hits.insert(make_pair(URLa,1));
+		    }else{
+		        posH->second++;
+		    }
+		    //adding to 2 keys map
+		    if (grafiqueMovements){
+    		    auto posT = trajets.find(make_pair(URLd,URLa));
+    		    if (posT==trajets.end()){
+    		        trajets.insert(make_pair(make_pair(URLd,URLa),1));
+    		    }else{
+    		        posT->second++;
+    		    }
+		    }
 		}
 	}
 	fi.close();
