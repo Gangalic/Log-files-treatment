@@ -261,6 +261,7 @@ void traitementGeneral(string f){
 	fi.close();
 }
 
+// it works even if you put blabla between the commands
 
 
 
