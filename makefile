@@ -1,6 +1,6 @@
 ECHO=echo
 COMP=g++
-INT=main.h Requete.h
+INT=main.h Requete.h Traitement.h
 REAL=$(INT:.h=.cpp)
 OBJ=$(REAL:.cpp=.o)
 EXE=LogApache
