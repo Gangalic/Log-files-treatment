@@ -28,7 +28,7 @@ using namespace std;
 
 //------------------------------------------------------------------ Types
 struct Option {
-    bool typeOption [3] ={0,0,0};      //1ère case : -g, 2ème case : -e, 3ème case : -t
+    bool typeOption [3] ={0,0,0};      //1ère case: -g, 2ème: -e, 3ème: -t
     int heure;
     string nomFichierDot;
 };
@@ -63,7 +63,8 @@ int main(int argc, char* argv[])
     
     Read(argc, argv);
     /*for (auto elem : trajets){
-	    cout<<elem.first.first<<" "<<elem.first.second<<" "<<elem.second<<endl;
+	    cout<<elem.first.first<<" "<<elem.first.second<<" "
+	    <<elem.second<<endl;
 	}
 	cout<<endl;
 	for (auto elem : hits){
@@ -97,7 +98,8 @@ void Read (int argc, char* argv[]){
             if(temp=="-g")
             {
                 if ((option.typeOption[0]==0) && ((i+1)<argc) ){
-                //gere le cas ou on trouve 2 fois -g et le cas òu il n'y a pas de nom de fichier donne
+                // gere le cas ou on trouve 2 fois -g et le cas 
+                // òu il n'y a pas de nom de fichier donne
                    option.typeOption[0]=1;
                     temp = string(argv[i+1]);
                     if (temp.substr(temp.length()-4,temp.length())==".dot"){
@@ -106,7 +108,8 @@ void Read (int argc, char* argv[]){
                         i=i+1;
                     }else
                     {
-                        cout<< "Erreur : le fichier donnée pour l'option -g n'est pas un .dot"<<endl;
+                        cout<<"Erreur : le fichier donnée pour l'option -g"
+                            <<"n'est pas un .dot"<<endl;
                         erreur = true;
                         break;
                     }
@@ -131,17 +134,20 @@ void Read (int argc, char* argv[]){
             else if(temp=="-t")
             {
                 if ((option.typeOption[0]==0) && ((i+1)<argc) ){
-                //gere le cas ou on trouve 2 fois -t et le cas òu il n'y a pas de nom de fichier donne
+                // gere le cas ou on trouve 2 fois -t et le cas 
+                // òu il n'y a pas de nom de fichier donne
                     option.typeOption[2]=1;
                     temp = string(argv[i+1]);
     
-                    if ( (temp.find_first_not_of("0123456789")==string::npos)&&( (atoi(temp.c_str())>=0)&&(atoi(temp.c_str())<24) ) ){
+                    if ( (temp.find_first_not_of("0123456789")==string::npos) &&
+                        ( (atoi(temp.c_str())>=0)&&(atoi(temp.c_str())<24) ) ){
                     //check si l arg donne est bien un entier entre 0 et 23
                         option.heure=atoi(temp.c_str());
                         i=i+1;
                     }else
                     {
-                        cout<< "Erreur : l'heure doit être un entier entre 0 et 23"<<endl;
+                        cout<<"Erreur: l'heure doit être un entier entre 0 et 23"
+                            <<endl;
                         erreur = true;
                         break;
                     }
@@ -162,7 +168,8 @@ void Read (int argc, char* argv[]){
 
     if (temp.substr(temp.length()-4,temp.length())==".log")
     {
-        string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz_0123456789";
+        string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz";
+        charac+="_0123456789";
         temp=temp.substr(0,temp.length()-5);
         if(temp.find_first_not_of(charac)==string::npos)
         {
@@ -178,7 +185,9 @@ void Read (int argc, char* argv[]){
         }
         else
         {
-            cout<<"Erreur : le nom du fichier specifie n'est pas valide. Veuillez n'entrez que des nombres, des lettres ou des tirets."<<endl;
+            cout<<"Erreur : le nom du fichier specifie n'est pas valide. "
+                <<"Veuillez n'entrez que des nombres, des lettres ou des tirets"
+                <<endl;
         }
     }
     else
@@ -261,8 +270,7 @@ void traitementGeneral(string f){
 	fi.close();
 }
 
-// it works even if you put blabla between the commands
-
+// it still works even if you put blabla between the commands
 
 
 //------------------------------------------------------------------ PRIVE
