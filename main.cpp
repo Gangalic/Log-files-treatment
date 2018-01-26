@@ -63,6 +63,7 @@ void CreateFileDot();
 int main(int argc, char* argv[])
 {
     
+    //traitement d'entrees
     Read(argc, argv);
     /*for (auto elem : trajets){
 	    cout<<elem.first.first<<" "<<elem.first.second<<" "
@@ -72,6 +73,8 @@ int main(int argc, char* argv[])
 	for (auto elem : hits){
 	    cout<<elem.first<<" "<<elem.second<<endl;
 	}*/
+	
+	//
 	for (pair<string,int> t : top){
 	    if (t.first!=""){
 	        cout<<t.first<<" "<<t.second<<endl;
@@ -257,7 +260,7 @@ void TraitementGeneral(string f){
 		        posH->second++;
 		    }
 		    //adding to 2 keys map if we have a graph of movements
-		    if (option.typeOption[0]){
+		    if (option.typeOption[0] && URLd!=URLa){
     		    auto posT = trajets.find(make_pair(URLd,URLa));
     		    if (posT==trajets.end()){
     		        trajets.insert(make_pair(make_pair(URLd,URLa),1));
@@ -282,10 +285,10 @@ void CreateFileDot(){
     f<<"digraph {\n";
     
     for (auto elem : trajets){
-        nodes="node"+i;
+        nodes="node"+to_string(i);
         dictTrajets.insert(make_pair(elem.first.first,nodes));
         i++;
-        nodes="node"+i;
+        nodes="node"+to_string(i);
         dictTrajets.insert(make_pair(elem.first.second,nodes));
         i++;
     }
@@ -302,9 +305,3 @@ void CreateFileDot(){
 }
 
 // it still works even if you put blabla between the commands
-
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées
-
