@@ -45,14 +45,6 @@ public:
     string ObtenirExtension();
 
 
-//------------------------------------------------- Surcharge d'opérateurs
-    Requete & operator = ( const Requete & unRequete );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-
 //-------------------------------------------- Constructeurs - destructeur
     Requete ( const string line);
     // Mode d'emploi (constructeur de copie) :
