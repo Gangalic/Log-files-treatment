@@ -275,22 +275,36 @@ void TraitementGeneral(string f){
 }
 
 void CreateFileDot(){
+    map <string, string> dictTrajets;
+    long i=0;
+    string nodes;
     ofstream f(option.nomFichierDot);
     f<<"digraph {\n";
     
     for (auto elem : trajets){
-        hits.insert(make_pair(elem.first.first,0));
+        nodes="node"+i;
+        dictTrajets.insert(make_pair(elem.first.first,nodes));
+        i++;
+        nodes="node"+i;
+        dictTrajets.insert(make_pair(elem.first.second,nodes));
+        i++;
     }
     
-    for (auto elem : hits){
-        f<<elem.first<<" [label=\""<<elem.first<<"\"];\n";
+    for (auto elem : dictTrajets){
+        f<<elem.second<<" [label=\""<<elem.first<<"\"];\n";
     }
     
     for (auto elem : trajets){
-        f<<elem.first.first<<" -> "<<elem.first.second<<" [label=\""
+        f<<dictTrajets[elem.first.first]<<" -> "<<dictTrajets[elem.first.second]<<" [label=\""
         <<elem.second<<"\"];\n";
     }
     f<<"}";
 }
 
 // it still works even if you put blabla between the commands
+
+
+//------------------------------------------------------------------ PRIVE
+
+//----------------------------------------------------- Méthodes protégées
+
