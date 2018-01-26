@@ -55,7 +55,9 @@ bool erreur =false;
 //class declaration
 void Read (int argc, char* argv[]);
 
-void traitementGeneral(string f);
+void TraitementGeneral(string f);
+
+void CreateFileDot();
 
 //main
 int main(int argc, char* argv[])
@@ -71,8 +73,15 @@ int main(int argc, char* argv[])
 	    cout<<elem.first<<" "<<elem.second<<endl;
 	}*/
 	for (pair<string,int> t : top){
-	    cout<<t.first<<" "<<t.second<<endl;
+	    if (t.first!=""){
+	        cout<<t.first<<" "<<t.second<<endl;
+	    }
 	}
+	
+	if (option.typeOption[0]){
+	    CreateFileDot();
+	}
+	
 
 }
 
@@ -133,7 +142,7 @@ void Read (int argc, char* argv[]){
             }
             else if(temp=="-t")
             {
-                if ((option.typeOption[0]==0) && ((i+1)<argc) ){
+                if ((option.typeOption[2]==0) && ((i+1)<argc) ){
                 // gere le cas ou on trouve 2 fois -t et le cas 
                 // òu il n'y a pas de nom de fichier donne
                     option.typeOption[2]=1;
@@ -205,21 +214,16 @@ void Read (int argc, char* argv[]){
     {
         //traitement des fichiers
         string file=string(argv[argc-1]);
-        traitementGeneral(file);
+        TraitementGeneral(file);
     }
 }
 
 //traitement
-void traitementGeneral(string f){
+void TraitementGeneral(string f){
 	string line;
 	ifstream fi;
 	fi.open(f);
 	bool selection;
-	bool grafiqueMovements=false;
-	// if we have a graph of movements
-	if (option.typeOption[0]){
-	   grafiqueMovements=true;
-	}
 	while (fi.good()){
 		getline(fi, line);
 		selection=true;
@@ -252,8 +256,8 @@ void traitementGeneral(string f){
 		    }else{
 		        posH->second++;
 		    }
-		    //adding to 2 keys map
-		    if (grafiqueMovements){
+		    //adding to 2 keys map if we have a graph of movements
+		    if (option.typeOption[0]){
     		    auto posT = trajets.find(make_pair(URLd,URLa));
     		    if (posT==trajets.end()){
     		        trajets.insert(make_pair(make_pair(URLd,URLa),1));
@@ -270,10 +274,23 @@ void traitementGeneral(string f){
 	fi.close();
 }
 
+void CreateFileDot(){
+    ofstream f(option.nomFichierDot);
+    f<<"digraph {\n";
+    
+    for (auto elem : trajets){
+        hits.insert(make_pair(elem.first.first,0));
+    }
+    
+    for (auto elem : hits){
+        f<<elem.first<<" [label=\""<<elem.first<<"\"];\n";
+    }
+    
+    for (auto elem : trajets){
+        f<<elem.first.first<<" -> "<<elem.first.second<<" [label=\""
+        <<elem.second<<"\"];\n";
+    }
+    f<<"}";
+}
+
 // it still works even if you put blabla between the commands
-
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées
-
