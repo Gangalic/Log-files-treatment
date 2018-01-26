@@ -60,14 +60,6 @@ string Requete::ObtenirExtension()
 } //----- Fin de Méthode
 
 
-//------------------------------------------------- Surcharge d'opérateurs
-Requete & Requete::operator = ( const Requete & unRequete )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
-
-
 //-------------------------------------------- Constructeurs - destructeur
 Requete::Requete ( const string line )
 // Algorithme :
