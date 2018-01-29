@@ -49,12 +49,12 @@ void Traitement::Traiter (int argc, char* argv[]){
         //avec option
         for(int i=1; i<argc-1;i++)
         {
-    
+
             string temp = string(argv[i]);
             if(temp=="-g")
             {
                 if ((option.typeOption[0]==0) && ((i+1)<argc) ){
-                // gere le cas ou on trouve 2 fois -g et le cas 
+                // gere le cas ou on trouve 2 fois -g et le cas
                 // òu il n'y a pas de nom de fichier donne
                    option.typeOption[0]=1;
                     temp = string(argv[i+1]);
@@ -90,11 +90,11 @@ void Traitement::Traiter (int argc, char* argv[]){
             else if(temp=="-t")
             {
                 if ((option.typeOption[2]==0) && ((i+1)<argc) ){
-                // gere le cas ou on trouve 2 fois -t et le cas 
+                // gere le cas ou on trouve 2 fois -t et le cas
                 // òu il n'y a pas de nom de fichier donne
                     option.typeOption[2]=1;
                     temp = string(argv[i+1]);
-    
+
                     if ( (temp.find_first_not_of("0123456789")==string::npos) &&
                         ( (atoi(temp.c_str())>=0)&&(atoi(temp.c_str())<24) ) ){
                     //check si l arg donne est bien un entier entre 0 et 23
@@ -113,9 +113,9 @@ void Traitement::Traiter (int argc, char* argv[]){
                     erreur = true;
                     break;
                 }
-    
+
             }
-    
+
         }
 
     }
@@ -159,6 +159,7 @@ void Traitement::Traiter (int argc, char* argv[]){
         cout<<"Aucun traitement n'a pas ete effectue."<<endl;
     }else
     {
+        cout<<"Traitement en cours"<<endl;
         //traitement des fichiers
         string file=string(argv[argc-1]);
         TraitementGeneral(file);
@@ -202,7 +203,7 @@ void Traitement::TraitementGeneral(string f){
 		getline(fi, line);
 		selection=true;
 		Requete lineR = Requete(line);
-		
+
 		if (lineR.ObtenirStatut()==200){
 			//only text documents
 			if (option.typeOption[1]){
@@ -219,7 +220,7 @@ void Traitement::TraitementGeneral(string f){
 		}else{
 		    selection=false;
 		}
-		
+
 		if (selection){
 		    string URLd=lineR.ObtenirURLdepart();
 		    string URLa=lineR.ObtenirURLarrivee();
@@ -245,13 +246,17 @@ void Traitement::TraitementGeneral(string f){
 	                [](const pair<string, int> &a, const pair<string,int> &b){
 	                    return a.second>b.second;
 	                });
-	                
+
+    if((top.front()).first=="")
+    {
+        cout<<"Aucun résultat n'a été trouvé"<<endl;
+    }
 	for (pair<string,int> t : top){
 	    if (t.first!=""){
 	        cout<<t.first<<" "<<t.second<<endl;
 	    }
 	}
-	
+
 	fi.close();
 }
 
@@ -262,7 +267,7 @@ void Traitement::CreerFichierDot(){
     string nodes;
     ofstream f(option.nomFichierDot);
     f<<"digraph {\n";
-    
+
     for (auto elem : trajets){
         nodes="node"+to_string(i);
         dictTrajets.insert(make_pair(elem.first.first,nodes));
@@ -271,11 +276,11 @@ void Traitement::CreerFichierDot(){
         dictTrajets.insert(make_pair(elem.first.second,nodes));
         i++;
     }
-    
+
     for (auto elem : dictTrajets){
         f<<elem.second<<" [label=\""<<elem.first<<"\"];\n";
     }
-    
+
     for (auto elem : trajets){
         f<<dictTrajets[elem.first.first]<<" -> "<<dictTrajets[elem.first.second]<<" [label=\""
         <<elem.second<<"\"];\n";
