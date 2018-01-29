@@ -34,14 +34,6 @@ class Traitement
 //----------------------------------------------------------------- PUBLIC
 
 public:
-//----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-    
-    void Traiter(int argc, char* argv[]);
 
 //-------------------------------------------- Constructeurs - destructeur
 
@@ -61,12 +53,14 @@ public:
 
 protected:
 //----------------------------------------------------- Méthodes protégées
+    void Traiter(int argc, char* argv[]);
+	
     void TraitementGeneral(string f);
     
     void CreerFichierDot();
 
 //----------------------------------------------------- Attributs protégés
-	map <pair<string,string>,int> trajets;
+    map <pair<string,string>,int> trajets;
     map <string,int> hits;
     vector <pair<string, int>> top;
     Option option;
