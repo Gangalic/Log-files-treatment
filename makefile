@@ -3,7 +3,7 @@ COMP=g++
 INT=main.h Requete.h Traitement.h
 REAL=$(INT:.h=.cpp)
 OBJ=$(REAL:.cpp=.o)
-EXE=LogApache
+EXE=analog
 RMFLAG=-f
 CLEAN=efface
 OPCOMP=-g -ansi -pedantic -Wall -std=c++11
