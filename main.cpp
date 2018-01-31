@@ -1,9 +1,9 @@
 /*************************************************************************
                            main  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 26/01/2018
+    copyright            : (C) 2018 par B3332 (Duraffourg & Gangalic)
+    e-mail               : b3332@insa-lyon.fr
 *************************************************************************/
 
 //---------- Réalisation de la classe <main> (fichier main.cpp) ------------
