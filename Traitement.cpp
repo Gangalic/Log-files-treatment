@@ -58,7 +58,8 @@ void Traitement::Traiter (int argc, char* argv[]){
                 // òu il n'y a pas de nom de fichier donne
                    option.typeOption[0]=1;
                     temp = string(argv[i+1]);
-                    if (temp.substr(temp.length()-4,temp.length())==".dot"){
+                    if ( (temp.length()>4) &&  
+                        (temp.substr(temp.length()-4,temp.length())==".dot") ){
                     //gere le cas ou le fichier n est pas .dot
                         option.nomFichierDot=string(argv[i+1]);
                         i=i+1;
