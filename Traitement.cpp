@@ -52,24 +52,37 @@ bool Traitement::Traiter (int argc, char* argv[]){
 
             string temp = string(argv[i]);
             if(temp=="-g")
-            {
+            {	
                 if ((option.typeOption[0]==0) && ((i+1)<argc) ){
                 // gere le cas ou on trouve 2 fois -g et le cas
                 // òu il n'y a pas de nom de fichier donne
-                   option.typeOption[0]=1;
-                    temp = string(argv[i+1]);
-                    if ( (temp.length()>4) &&  
-                        (temp.substr(temp.length()-4,temp.length())==".dot") ){
-                    //gere le cas ou le fichier n est pas .dot
-                        option.nomFichierDot=string(argv[i+1]);
-                        i=i+1;
-                    }else
-                    {
-                        cout<<"Erreur : le fichier donnée pour l'option -g"
-                            <<"n'est pas un .dot"<<endl;
-                        erreur = true;
-                        break;
-                    }
+					string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz";
+					charac+="_0123456789";
+					temp = string(argv[i+1]);
+					
+					if(temp.find_first_not_of(charac)==string::npos)
+					//gere le cas ou le nom du fichier est mal specifie
+					{
+						option.typeOption[0]=1;
+						if ( (temp.length()>4) &&  
+							(temp.substr(temp.length()-4,temp.length())==".dot") ){
+						//gere le cas ou le fichier n est pas .dot
+							option.nomFichierDot=string(argv[i+1]);
+							i=i+1;
+						}else
+						{
+							cout<<"Erreur : le fichier donnée pour l'option -g"
+								<<"n'est pas un .dot"<<endl;
+							erreur = true;
+							break;
+						}
+					}
+					else
+					{
+						cout << "Erreur : le nom du fichier .dot est mal spécifié"<<endl;
+						erreur = true;
+						break;
+					}
                 }else
                 {
                     cout << "Erreur : -g n'a pas été correctement entrée"<<endl;
@@ -145,6 +158,8 @@ bool Traitement::Traiter (int argc, char* argv[]){
             cout<<"Erreur : le nom du fichier specifie n'est pas valide. "
                 <<"Veuillez n'entrez que des nombres, des lettres ou des tirets"
                 <<endl;
+                
+			erreur = true;
         }
     }
     else
@@ -157,7 +172,7 @@ bool Traitement::Traiter (int argc, char* argv[]){
 
     if(erreur)
     {
-        cout<<"Aucun traitement n'a pas ete effectue."<<endl;
+        cout<<"Aucun traitement n'a ete effectue."<<endl;
         return false;
     }else
     {
