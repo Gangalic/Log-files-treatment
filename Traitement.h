@@ -48,12 +48,13 @@ public:
     //
     // Contrat :
     //
+    
+    void Traiter(int argc, char* argv[]);
 
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
-    void Traiter(int argc, char* argv[]);
 	
     void TraitementGeneral(string f);
     
