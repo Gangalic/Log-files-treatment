@@ -56,33 +56,38 @@ bool Traitement::Traiter (int argc, char* argv[]){
                 if ((option.typeOption[0]==0) && ((i+1)<argc) ){
                 // gere le cas ou on trouve 2 fois -g et le cas
                 // òu il n'y a pas de nom de fichier donne
-					string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz";
-					charac+="_0123456789";
 					temp = string(argv[i+1]);
 					
-					if(temp.find_first_not_of(charac)==string::npos)
-					//gere le cas ou le nom du fichier est mal specifie
-					{
-						option.typeOption[0]=1;
-						if ( (temp.length()>4) &&  
-							(temp.substr(temp.length()-4,temp.length())==".dot") ){
+					if ( (temp.length()>4) &&  
+						(temp.substr(temp.length()-4,temp.length())==".dot") ){
 						//gere le cas ou le fichier n est pas .dot
+						
+						string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz";
+						charac+="_0123456789";
+						temp = temp.substr(temp.length(),temp.length()-4);
+						
+						if(temp.find_first_not_of(charac)==string::npos)
+						//gere le cas ou le nom du fichier est mal specifie
+						{
+							
+							option.typeOption[0]=1;
 							option.nomFichierDot=string(argv[i+1]);
 							i=i+1;
-						}else
+						}
+						else
 						{
-							cout<<"Erreur : le fichier donnée pour l'option -g"
-								<<"n'est pas un .dot"<<endl;
+							cout << "Erreur : le nom du fichier .dot est mal spécifié"<<endl;
 							erreur = true;
 							break;
 						}
-					}
-					else
+					}else
 					{
-						cout << "Erreur : le nom du fichier .dot est mal spécifié"<<endl;
+						cout<<"Erreur : le fichier donnée pour l'option -g "
+							<<"n'est pas un .dot"<<endl;
 						erreur = true;
 						break;
 					}
+				
                 }else
                 {
                     cout << "Erreur : -g n'a pas été correctement entrée"<<endl;

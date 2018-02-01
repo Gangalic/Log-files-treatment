@@ -35,6 +35,8 @@ class Traitement
 
 public:
 
+//------------------------------------------------------- Méthodes publics
+    bool Traiter(int argc, char* argv[]);
 //-------------------------------------------- Constructeurs - destructeur
 
     Traitement ( );
@@ -48,8 +50,6 @@ public:
     //
     // Contrat :
     //
-    
-    void Traiter(int argc, char* argv[]);
 
 //------------------------------------------------------------------ PRIVE
 
