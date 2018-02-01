@@ -46,30 +46,29 @@ bool Traitement::Traiter (int argc, char* argv[]){
         //sans option
     }else
     {
-        //avec option
+        //avec options
         for(int i=1; i<argc-1;i++)
         {
 
             string temp = string(argv[i]);
             if(temp=="-g")
-            {	
+            {
                 if ((option.typeOption[0]==0) && ((i+1)<argc) ){
                 // gere le cas ou on trouve 2 fois -g et le cas
                 // òu il n'y a pas de nom de fichier donne
-					temp = string(argv[i+1]);
-					
-					if ( (temp.length()>4) &&  
+					temp = argv[i+1];
+
+					if ( (temp.length()>4) &&
 						(temp.substr(temp.length()-4,temp.length())==".dot") ){
 						//gere le cas ou le fichier n est pas .dot
-						
+
 						string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz";
 						charac+="_0123456789";
-						temp = temp.substr(temp.length(),temp.length()-4);
-						
+						temp = temp.substr(0,temp.length()-4);
+
 						if(temp.find_first_not_of(charac)==string::npos)
 						//gere le cas ou le nom du fichier est mal specifie
 						{
-							
 							option.typeOption[0]=1;
 							option.nomFichierDot=string(argv[i+1]);
 							i=i+1;
@@ -87,7 +86,7 @@ bool Traitement::Traiter (int argc, char* argv[]){
 						erreur = true;
 						break;
 					}
-				
+
                 }else
                 {
                     cout << "Erreur : -g n'a pas été correctement entrée"<<endl;
@@ -136,7 +135,7 @@ bool Traitement::Traiter (int argc, char* argv[]){
             }
 
         }
-	
+
     }
 
     string temp = string(argv[argc-1]);
@@ -163,7 +162,7 @@ bool Traitement::Traiter (int argc, char* argv[]){
             cout<<"Erreur : le nom du fichier specifie n'est pas valide. "
                 <<"Veuillez n'entrez que des nombres, des lettres ou des tirets"
                 <<endl;
-                
+
 			erreur = true;
         }
     }
@@ -190,8 +189,8 @@ bool Traitement::Traiter (int argc, char* argv[]){
         }
         return true;
     }
-    
-   
+
+
 }
 
 
