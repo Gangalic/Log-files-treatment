@@ -21,5 +21,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     Traitement T;
-    T.Traiter(argc,argv);
+    if(T.Traiter(argc,argv))
+    {
+		return 0;
+	}
+	else {
+		return 1;
+	}
 }
