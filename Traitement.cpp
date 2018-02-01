@@ -33,7 +33,7 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
-void Traitement::Traiter (int argc, char* argv[]){
+bool Traitement::Traiter (int argc, char* argv[]){
     string nomFichierLog;
 
     if(argc == 1)
@@ -79,7 +79,7 @@ void Traitement::Traiter (int argc, char* argv[]){
             }
             else if(temp=="-e")
             {
-                if (option.typeOption[0]==0) {
+                if (option.typeOption[1]==0) {
                     option.typeOption[1]=1;
                 }else
                 {
@@ -118,7 +118,7 @@ void Traitement::Traiter (int argc, char* argv[]){
             }
 
         }
-
+	
     }
 
     string temp = string(argv[argc-1]);
@@ -158,6 +158,7 @@ void Traitement::Traiter (int argc, char* argv[]){
     if(erreur)
     {
         cout<<"Aucun traitement n'a pas ete effectue."<<endl;
+        return false;
     }else
     {
         cout<<"Traitement en cours"<<endl;
@@ -167,7 +168,10 @@ void Traitement::Traiter (int argc, char* argv[]){
         if (option.typeOption[0]){
             CreerFichierDot();
         }
+        return true;
     }
+    
+   
 }
 
 
