@@ -1,9 +1,9 @@
 /*************************************************************************
                            Traitement  -  description
                              -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
+    début                : 26/01/2018
+    copyright            : (C) 2018 par B3332 (Duraffourg & Gangalic)
+    e-mail               : b3332@insa-lyon.fr
 *************************************************************************/
 
 //------ Réalisation de la classe <Traitement> (fichier Traitement.cpp) -------
@@ -17,7 +17,6 @@ using namespace std;
 #include <fstream>
 #include <sstream>
 #include <map>
-//#include <vector>
 #include <algorithm>
 
 //------------------------------------------------------ Include personnel
@@ -27,12 +26,8 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Requete::Méthode ( liste des paramètres )
 // Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
+// Traite tous les exceptions d'insertion
 bool Traitement::Traiter (int argc, char* argv[]){
     string nomFichierLog;
 
@@ -55,19 +50,19 @@ bool Traitement::Traiter (int argc, char* argv[]){
             {
                 if ((option.typeOption[0]==0) && ((i+1)<argc) ){
                 // gere le cas ou on trouve 2 fois -g et le cas
-                // òu il n'y a pas de nom de fichier donne
+                // ou il n'y a pas de nom de fichier donne
 					temp = argv[i+1];
 
 					if ( (temp.length()>4) &&
 						(temp.substr(temp.length()-4,temp.length())==".dot") ){
-						//gere le cas ou le fichier n est pas .dot
+						// gere le cas ou le fichier n est pas .dot
 
-						string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz";
-						charac+="_0123456789";
+						string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-";
+						charac+="abcdefghijklmnopqrstuvwxyz_0123456789";
 						temp = temp.substr(0,temp.length()-4);
 
 						if(temp.find_first_not_of(charac)==string::npos)
-						//gere le cas ou le nom du fichier est mal specifie
+						// gere le cas ou le nom du fichier est mal specifie
 						{
 							option.typeOption[0]=1;
 							option.nomFichierDot=string(argv[i+1]);
@@ -75,7 +70,8 @@ bool Traitement::Traiter (int argc, char* argv[]){
 						}
 						else
 						{
-							cout << "Erreur : le nom du fichier .dot est mal spécifié"<<endl;
+							cout<<"Erreur : le nom du fichier .dot est mal"
+							    <<" spécifié"<<endl;
 							erreur = true;
 							break;
 						}
@@ -109,7 +105,7 @@ bool Traitement::Traiter (int argc, char* argv[]){
             {
                 if ((option.typeOption[2]==0) && ((i+1)<argc) ){
                 // gere le cas ou on trouve 2 fois -t et le cas
-                // òu il n'y a pas de nom de fichier donne
+                // ou il n'y a pas de nom de fichier donne
                     option.typeOption[2]=1;
                     temp = string(argv[i+1]);
 
@@ -139,8 +135,10 @@ bool Traitement::Traiter (int argc, char* argv[]){
     }
 
     string temp = string(argv[argc-1]);
-
-    if (temp.substr(temp.length()-4,temp.length())==".log")
+    
+    // verification de bon ecriture du fichier .log
+    if ((temp.length()>4) &&
+        (temp.substr(temp.length()-4,temp.length())==".log"))
     {
         string charac = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz";
         charac+="_0123456789";
@@ -181,7 +179,7 @@ bool Traitement::Traiter (int argc, char* argv[]){
     }else
     {
         cout<<"Traitement en cours"<<endl;
-        //traitement des fichiers
+        // traitement des fichiers
         string file=string(argv[argc-1]);
         TraitementGeneral(file);
         if (option.typeOption[0]){
@@ -198,7 +196,7 @@ bool Traitement::Traiter (int argc, char* argv[]){
 //-------------------------------------------- Constructeurs - destructeur
 Traitement::Traitement( ) : top(10)
 // Algorithme :
-// lire tous la ligne et stoquer les infos
+// initilisation des attributs
 {
 #ifdef MAP
     cout << "Appel au constructeur de <Traitement>" << endl;
@@ -206,8 +204,6 @@ Traitement::Traitement( ) : top(10)
 } //----- Fin de Traitement (constructeur de copie)
 
 Traitement::~Traitement()
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au destructeur de <Traitement>" << endl;
@@ -217,7 +213,8 @@ Traitement::~Traitement()
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
-//traitement
+// Algorithme :
+// Traitement generale en utilisant les options choisis par l'utilisateur
 void Traitement::TraitementGeneral(string f){
 	string line;
 	ifstream fi;
@@ -227,15 +224,16 @@ void Traitement::TraitementGeneral(string f){
 		getline(fi, line);
 		selection=true;
 		Requete lineR = Requete(line);
-
+        
+        // verifier si la page a ete bien accedee
 		if (lineR.ObtenirStatut()==200){
-			//only text documents
+			// seulement pour les documents
 			if (option.typeOption[1]){
 				if (lineR.ObtenirExtension()!="html"){
 				    selection=false;
 				}
 			}
-			// for certain time
+			// pour un certain temps
 			if (option.typeOption[2] && selection){
 				if (lineR.ObtenirHeure()!=option.heure){
 				    selection=false;
@@ -248,14 +246,14 @@ void Traitement::TraitementGeneral(string f){
 		if (selection){
 		    string URLd=lineR.ObtenirURLdepart();
 		    string URLa=lineR.ObtenirURLarrivee();
-		    // adding elems to map
+		    // ajouter les elements dans map "hits"
 		    auto posH = hits.find(URLa);
 		    if (posH==hits.end()){
 		        hits.insert(make_pair(URLa,1));
 		    }else{
 		        posH->second++;
 		    }
-		    //adding to 2 keys map if we have a graph of movements
+		    // ajouter les elements dans map "trajets" si on a l'option -g
 		    if (option.typeOption[0]){
     		    auto posT = trajets.find(make_pair(URLd,URLa));
     		    if (posT==trajets.end()){
@@ -266,18 +264,24 @@ void Traitement::TraitementGeneral(string f){
 		    }
 		}
 	}
+	// trier et trouver le top 10 pages visitees
 	partial_sort_copy(hits.begin(),hits.end(),top.begin(),top.end(),
 	                [](const pair<string, int> &a, const pair<string,int> &b){
 	                    return a.second>b.second;
 	                });
-
+    
+    // afficher le top 10
     if((top.front()).first=="")
     {
         cout<<"Aucun résultat n'a été trouvé"<<endl;
     }
 	for (pair<string,int> t : top){
 	    if (t.first!=""){
-	        cout<<t.first<<" "<<t.second<<endl;
+	        cout<<t.first<<" ("<<t.second<<" hit";
+	        if (t.second>1){
+	            cout<<"s";
+	        }
+	        cout<<")"<<endl;
 	    }
 	}
 
@@ -306,10 +310,8 @@ void Traitement::CreerFichierDot(){
     }
 
     for (auto elem : trajets){
-        f<<dictTrajets[elem.first.first]<<" -> "<<dictTrajets[elem.first.second]<<" [label=\""
-        <<elem.second<<"\"];\n";
+        f<<dictTrajets[elem.first.first]<<" -> "<<dictTrajets[elem.first.second]
+        <<" [label=\""<<elem.second<<"\"];\n";
     }
     f<<"}";
 }
-
-// it still works even if you put blabla between the commands
